@@ -26,6 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
 ##  System dependencies are found with CMake's conventions
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(OpenCV 4 REQUIRED)
+option(PROMETHEUS_DEMO_BUILD_ADVANCED "Build advanced demos requiring optional SDKs" ON)
 #find_package(SpireCV REQUIRED)
 
 
@@ -88,6 +89,7 @@ target_link_libraries(circular_trajectory_control ${catkin_LIBRARIES})
 add_executable(waypoint_pos_control basic/waypoint_pos_control/src/waypoint_pos_control.cpp)
 target_link_libraries(waypoint_pos_control ${catkin_LIBRARIES})
 
+if(PROMETHEUS_DEMO_BUILD_ADVANCED)
 add_executable(formation_control advanced/formation_control/src/formation_control.cpp)
 target_link_libraries(formation_control ${catkin_LIBRARIES})
 
@@ -111,6 +113,7 @@ target_link_libraries(prosim_gimbal_yolov5_tracking ${catkin_LIBRARIES} ${OpenCV
 
 add_executable(prosim_gimbal_yolov5_tracking_land advanced/gimbal_yolov5_tracking_land/src/prosim_gimbal_yolov5_tracking_land.cpp)
 target_link_libraries(prosim_gimbal_yolov5_tracking_land ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} yaml-cpp)
+endif()
 
 
 #############
