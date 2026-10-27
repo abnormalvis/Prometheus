@@ -31,6 +31,8 @@ if __name__ == "__main__":
     parser.add_argument('--serial_device', default="/dev/ttyACM0", help="Serial device for FMU")
     parser.add_argument('--serial_baudrate', default=921600, help="Baudrate of Serial device for FMU")
     parser.add_argument('--hil_mode', default=0, help="Enable HIL mode for HITL simulation")
+    parser.add_argument('--send_odometry', default=1, type=int, choices=(0, 1),
+                        help="Send simulator ground-truth odometry to PX4")
     parser.add_argument('--output-file', help="sdf output file")
     parser.add_argument('--stdout', action='store_true', default=False, help="dump to stdout instead of file")
     parser.add_argument('--mavlink_id', default=1, help="Mavlink system ID")
@@ -69,6 +71,7 @@ if __name__ == "__main__":
          'video_uri': args.video_uri, \
          'mavlink_cam_udp_port': args.mavlink_cam_udp_port, \
          'hil_mode': args.hil_mode, \
+         'send_odometry': args.send_odometry, \
          'ros_version': ros_version}
 
     result = template.render(d)

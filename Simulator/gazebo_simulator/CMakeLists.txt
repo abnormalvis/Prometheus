@@ -39,7 +39,27 @@ install(DIRECTORY include/${PROJECT_NAME}/
   FILES_MATCHING PATTERN "*.h"
 )
 
-## Mark other files for installation (e.g. launch and bag files, etc.)
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+)
+
+## Keep the package's source-relative resource paths in the install space.
+install(DIRECTORY launch_basic/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch_basic
+)
+install(DIRECTORY launch_uav_with_sensor/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch_uav_with_sensor
+)
+install(DIRECTORY config/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
+)
+install(DIRECTORY gazebo_models/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/gazebo_models
+)
+install(DIRECTORY gazebo_worlds/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/gazebo_worlds
+)
+
+install(PROGRAMS scripts/jinja_gen.py
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/scripts
 )

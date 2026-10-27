@@ -19,6 +19,10 @@
 	<!-- p450_2Dlidar_D435i：p450模型无人机、2D雷达传感器(含雷达数据)、深度相机D435i(含深度相机相关数据) -->
     <!-- 如果选择了含D435i模型的模型文件，需要将本文件最下方的TF转换注释代码打开，否则将导致TF树出现问题 -->
 	<arg name="vehicle" default="p450"/>
+	<arg name="est" default="ekf2"/>
+	<arg name="model" default="$(arg vehicle)"/>
+	<arg name="sdf" default="$(find prometheus_gazebo)/gazebo_models/uav_models/$(arg model)/$(arg model).sdf.jinja"/>
+	<arg name="start_px4" default="true"/>
 	<arg name="d435i_enable" default="false"/>
     <!--无人机编号-->
     <arg name="uav1_id" default="1"/>
@@ -30,7 +34,11 @@
 	<!-- 1号无人机 -->
 	<include file="$(find prometheus_gazebo)/launch_basic/sitl_px4_outdoor.launch">
 		<arg name="uav_id" value="$(arg uav1_id)"/>
+		<arg name="est" value="$(arg est)"/>
 		<arg name="vehicle" value="$(arg vehicle)"/>
+		<arg name="model" value="$(arg model)"/>
+		<arg name="sdf" value="$(arg sdf)"/>
+		<arg name="start_px4" value="$(arg start_px4)"/>
 		<arg name="uav_init_x" value="$(arg uav1_init_x)"/>
 		<arg name="uav_init_y" value="$(arg uav1_init_y)"/>
 		<arg name="uav_init_z" value="0.15"/>

@@ -1,0 +1,64 @@
+<launch>
+    <arg name="uav_id" default="1" />
+    <arg name="start_px4" default="false" />
+    <arg name="world" default="$(find prometheus_gazebo)/gazebo_worlds/planning_worlds/planning_easy.world" />
+    <arg name="uav_init_x" default="0.0" />
+    <arg name="uav_init_y" default="0.0" />
+    <arg name="uav_init_yaw" default="0.0" />
+    <arg name="camera_topic" default="/uav$(arg uav_id)/camera/color/image_raw" />
+    <arg name="imu_topic" default="/uav$(arg uav_id)/mavros/imu/data_raw" />
+    <arg name="sqrtvins_config" default="$(find ov_srvins)/../config/gazebo_p450/estimator_config.yaml" />
+    <arg name="start_uav_control" default="true" />
+    <arg name="joy_enable" default="true" />
+
+    <include file="$(find prometheus_gazebo)/launch_basic/sitl_outdoor_1uav_P450.launch">
+        <arg name="world" value="$(arg world)" />
+        <arg name="use_sim_time" value="true" />
+        <arg name="est" value="ekf2_vision" />
+        <arg name="start_px4" value="$(arg start_px4)" />
+        <arg name="vehicle" value="p450" />
+        <arg name="model" value="p450_D435i" />
+        <arg name="uav1_id" value="$(arg uav_id)" />
+        <arg name="uav1_init_x" value="$(arg uav_init_x)" />
+        <arg name="uav1_init_y" value="$(arg uav_init_y)" />
+        <arg name="uav1_init_yaw" value="$(arg uav_init_yaw)" />
+    </include>
+
+    <group if="$(arg start_uav_control)">
+        <node pkg="prometheus_uav_control" type="uav_control_main" name="uav_control_main_$(arg uav_id)" output="screen">
+            <param name="uav_id" value="$(arg uav_id)" />
+            <param name="sim_mode" value="true" />
+            <param name="flag_printf" value="true" />
+            <param name="control/enable_external_control" value="false" />
+            <rosparam command="load" file="$(find prometheus_uav_control)/launch/uav_control_vins.yaml" />
+            <rosparam command="load" file="$(find prometheus_uav_control)/launch/sensor_tf_offset.yaml" />
+        </node>
+    </group>
+
+    <group if="$(arg joy_enable)">
+        <node pkg="prometheus_uav_control" type="joy_node" name="joy_node" output="screen" />
+    </group>
+
+    <include file="$(find ov_srvins)/launch/subscribe.launch">
+        <arg name="config_path" value="$(arg sqrtvins_config)" />
+        <arg name="max_cameras" value="1" />
+        <arg name="use_stereo" value="false" />
+        <arg name="topic_camera0" value="$(arg camera_topic)" />
+        <arg name="topic_imu" value="$(arg imu_topic)" />
+        <arg name="dobag" value="false" />
+        <arg name="dosave" value="false" />
+        <arg name="dolivetraj" value="false" />
+    </include>
+
+    <node pkg="offboard" type="vins_odometry_adapter" name="vins_pose_adapter" output="screen">
+        <param name="input_topic" value="/ov_srvins/odomimu" />
+        <param name="odometry_topic" value="/uav$(arg uav_id)/vins/odom" />
+        <param name="vision_pose_topic" value="/vins_estimator/imu_propagate" />
+        <param name="frame_id" value="map" />
+        <param name="child_frame_id" value="base_link" />
+        <param name="initial_x" value="$(arg uav_init_x)" />
+        <param name="initial_y" value="$(arg uav_init_y)" />
+        <param name="initial_z" value="0.15" />
+        <param name="initial_yaw" value="$(arg uav_init_yaw)" />
+    </node>
+</launch>

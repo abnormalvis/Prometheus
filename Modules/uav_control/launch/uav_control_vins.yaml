@@ -1,0 +1,29 @@
+control:
+  pos_controller: 0
+  enable_external_control: false
+  Takeoff_height: 1.5
+  Land_speed: 0.2
+  Disarm_height: 0.1
+  location_source: 7
+  maximum_safe_vel_xy: 1.0
+  maximum_safe_vel_z: 1.0
+  maximum_vel_error_for_vision: 2.0
+  maximum_vel_error_for_Odom: 0.8
+  COMMAND_MPC_XY_VEL_MAX: 1.0
+  COMMAND_MPC_ACC_HOR: 2.0
+
+enable_px4_params_load: true
+px4_params:
+  EKF2_AID_MASK: 24
+  EKF2_HGT_MODE: 3
+  MPC_XY_VEL_MAX: 1.0
+  MPC_ACC_HOR: 2.0
+  MPC_VEL_MANUAL: 1.0
+
+geo_fence:
+  x_min: -100.0
+  x_max: 100.0
+  y_min: -100.0
+  y_max: 100.0
+  z_min: -0.5
+  z_max: 100.0

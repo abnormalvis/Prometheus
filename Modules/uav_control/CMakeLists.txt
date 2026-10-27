@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 2.8.3)
 project(prometheus_uav_control)
 
 find_package(catkin REQUIRED COMPONENTS
-  message_generation  
   roscpp
   geometry_msgs
   nav_msgs
@@ -22,23 +21,8 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(mavlink REQUIRED)
 
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-
-## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-  geometry_msgs 
-  nav_msgs
-  sensor_msgs
-  std_msgs
-  prometheus_msgs
-)
-
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS message_runtime
 )
 ###########
 ## Build ##
@@ -61,17 +45,17 @@ add_library(uav_estimator src/uav_estimator.cpp)
 target_link_libraries(uav_estimator ${catkin_LIBRARIES})
 
 add_executable(uav_control_main src/uav_control_node.cpp)
-add_dependencies(uav_control_main prometheus_uav_control_gencpp)
+add_dependencies(uav_control_main ${catkin_EXPORTED_TARGETS})
 target_link_libraries(uav_control_main ${catkin_LIBRARIES})
 target_link_libraries(uav_control_main uav_controller)
 target_link_libraries(uav_control_main uav_estimator)
 
 add_executable(uav_command_pub utils/uav_command_pub.cpp)
-add_dependencies(uav_command_pub prometheus_uav_control_gencpp)
+add_dependencies(uav_command_pub ${catkin_EXPORTED_TARGETS})
 target_link_libraries(uav_command_pub ${catkin_LIBRARIES})
 
 add_executable(rc_test utils/rc_test.cpp)
-add_dependencies(rc_test prometheus_uav_control_gencpp)
+add_dependencies(rc_test ${catkin_EXPORTED_TARGETS})
 target_link_libraries(rc_test ${catkin_LIBRARIES})
 
 add_executable(joy_node utils/joy_node.cpp)

@@ -1,0 +1,11 @@
+<launch>
+    <arg name="start_px4" default="false" />
+    <arg name="start_uav_control" default="true" />
+    <arg name="joy_enable" default="true" />
+
+    <include file="$(find prometheus_gazebo)/launch_uav_with_sensor/sitl_p450_sqrtvins.launch">
+        <arg name="start_px4" value="$(arg start_px4)" />
+        <arg name="start_uav_control" value="$(arg start_uav_control)" />
+        <arg name="joy_enable" value="$(arg joy_enable)" />
+    </include>
+</launch>
